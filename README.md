@@ -18,7 +18,6 @@ TODO
 
 Items in order of importance
 
-* Implement cross entropy
 * Pass in arbitrary function for similarity measurement
 * Pass 2D array and calculate entropy along a given axis
 
