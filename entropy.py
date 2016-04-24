@@ -103,10 +103,10 @@ def entropy(x, dim, r, n=1, scale=True, remove_baseline=False):
 
         if remove_baseline:
             if cross:
-                patterns[0] -= np.mean(patterns[0], axis=0)
-                patterns[1] -= np.mean(patterns[1], axis=0)
+                patterns[0] = _remove_baseline(patterns[0], axis=0)
+                patterns[1] = _remove_baseline(patterns[1], axis=0)
             else:
-                patterns -= np.mean(patterns, axis=0)
+                patterns = _remove_baseline(patterns, axis=0)
 
         count = np.zeros(N-m)
         for i in range(N-m):
@@ -135,5 +135,22 @@ def entropy(x, dim, r, n=1, scale=True, remove_baseline=False):
     return np.log(phi[0] / phi[1])
 
 
-def _scale(x):
-    return (x - np.mean(x)) / np.std(x, ddof=1)
+def _scale(x, axis=None):
+    """
+    Scales data by removing the mean and scaling to unit variance.
+
+    Note: operates on the array passed in. Does not copy.
+    """
+    x = _remove_baseline(x, axis=axis)
+    x /= np.std(x, ddof=1, axis=axis, keepdims=True)
+    return x
+
+
+def _remove_baseline(x, axis=None):
+    """
+    Removes the mean from the input data.
+
+    Note: operates on the array passed in. Does not copy.
+    """
+    x -= np.mean(x, axis=axis, keepdims=True)
+    return x
