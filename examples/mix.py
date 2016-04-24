@@ -1,9 +1,14 @@
 """
+=================================
+Cross-FuzzyEn of MIX(p) Processes
+=================================
+
 Calculates the cross-FuzzyEn between two different pairs of MIX(p) processes
 across exponential function widths. The intention is to replicate Figure 3a of
 Xie et al. 2010 ("Cross-Fuzzy Entropy: A New Method to Test Pattern Synchrony
 of Bivariate Time Series").
 """
+print(__doc__)
 
 import sys
 import numpy as np
@@ -17,7 +22,9 @@ except:
     import entropy
 
 
-alpha_m12 = np.power(np.sum(np.power(np.sin(2*np.pi*np.arange(1, 13)/12), 2))/12, -0.5)
+alpha_m12 = np.power(
+    np.sum(np.power(np.sin(2*np.pi*np.arange(1, 13)/12), 2))/12,
+    -0.5)
 
 
 def mix(p, size=None):
@@ -53,7 +60,7 @@ def mix(p, size=None):
 def main():
     N = 100
     rep = 10
-    rs = np.logspace(-2, 0, 30)
+    rs = np.logspace(-3, 0, 30)
 
     x_p2 = mix(0.2, (rep, N))
     x_p3 = mix(0.3, (rep, N))
@@ -69,9 +76,10 @@ def main():
         es[:, ir] = np.mean(runs, axis=1)
 
     fig, ax = plt.subplots()
-    ax.semilogx(rs, es[0], 'ro', label='MIX(0.2) vs. MIX(0.3)')
-    ax.semilogx(rs, es[1], 'ko', label='MIX(0.3) vs. MIX(0.5)')
+    ax.semilogx(rs, es[0], 'ro-', label='MIX(0.2) vs. MIX(0.3)')
+    ax.semilogx(rs, es[1], 'ko-', label='MIX(0.3) vs. MIX(0.5)')
     ax.legend()
+    ax.set_ylim(0, 6)
 
     plt.show()
 

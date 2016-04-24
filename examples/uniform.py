@@ -1,7 +1,12 @@
 """
+===============================================
+FuzzyEn of Uniformly Distrubed Random Sequences
+===============================================
+
 Computes FuzzyEn of uniformly distributed random number sequences for different
 values of fuzzy function width `r`. The result should look roughly linear.
 """
+print(__doc__)
 
 import numpy as np
 import matplotlib.pyplot as plt
