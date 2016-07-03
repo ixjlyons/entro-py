@@ -89,9 +89,9 @@ def entropy(x, dim, r, n=1, scale=True, remove_baseline=False):
 
     if scale:
         if cross:
-            x = [_scale(x[0]), _scale(x[1])]
+            x = [_scale(np.copy(x[0])), _scale(np.copy(x[1]))]
         else:
-            x = _scale(x)
+            x = _scale(np.copy(x))
 
     phi = [0, 0]  # phi(m), phi(m+1)
     for j in [0, 1]:
