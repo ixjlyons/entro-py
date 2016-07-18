@@ -1,6 +1,6 @@
 """
 =================================================
-FuzzyEn of Uniformly Distrubuted Random Sequences
+FuzzyEn of Uniformly Distributed Random Sequences
 =================================================
 
 Computes FuzzyEn of uniformly distributed random number sequences for different
