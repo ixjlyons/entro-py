@@ -1,7 +1,7 @@
 """
-===============================================
-FuzzyEn of Uniformly Distrubed Random Sequences
-===============================================
+=================================================
+FuzzyEn of Uniformly Distrubuted Random Sequences
+=================================================
 
 Computes FuzzyEn of uniformly distributed random number sequences for different
 values of fuzzy function width `r`. The result should look roughly linear.
