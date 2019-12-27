@@ -130,7 +130,7 @@ def entropy(x, dim, r, n=1, scale=True, remove_baseline=False):
 
             count[i] = np.sum(sim) - 1
 
-        phi[j] = np.mean(count) / (N-m-1)
+        phi[j] = np.mean(count) / (N-dim-1)
 
     return np.log(phi[0] / phi[1])
 
