@@ -96,10 +96,11 @@ def entropy(x, dim, r, n=1, scale=True, remove_baseline=False):
     phi = [0, 0]  # phi(m), phi(m+1)
     for j in [0, 1]:
         m = dim + j
+        npat = N-dim
         if cross:
-            patterns = [pattern_mat(x[0], m), pattern_mat(x[1], m)]
+            patterns = [pattern_mat(x[0], m)[:, :npat], pattern_mat(x[1], m)[:, :npat]]
         else:
-            patterns = pattern_mat(x, m)
+            patterns = pattern_mat(x, m)[:, :npat]
 
         if remove_baseline:
             if cross:
@@ -108,8 +109,8 @@ def entropy(x, dim, r, n=1, scale=True, remove_baseline=False):
             else:
                 patterns = _remove_baseline(patterns, axis=0)
 
-        count = np.zeros(N-m)
-        for i in range(N-m):
+        count = np.zeros(npat)
+        for i in range(npat):
             if cross:
                 if m == 1:
                     sub = patterns[1][i]
@@ -130,7 +131,7 @@ def entropy(x, dim, r, n=1, scale=True, remove_baseline=False):
 
             count[i] = np.sum(sim) - 1
 
-        phi[j] = np.mean(count) / (N-m-1)
+        phi[j] = np.mean(count) / (N-dim-1)
 
     return np.log(phi[0] / phi[1])
 
