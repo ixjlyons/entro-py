@@ -8,8 +8,6 @@ across exponential function widths. The intention is to replicate Figure 3a of
 Xie et al. 2010 ("Cross-Fuzzy Entropy: A New Method to Test Pattern Synchrony
 of Bivariate Time Series").
 """
-print(__doc__)
-
 import sys
 import numpy as np
 from numpy.random import uniform, binomial
@@ -17,10 +15,9 @@ import matplotlib.pyplot as plt
 
 try:
     import entropy
-except:
-    sys.path.insert(0, '..')
+except ImportError:
+    sys.path.insert(0, '.')
     import entropy
-
 
 alpha_m12 = np.power(
     np.sum(np.power(np.sin(2*np.pi*np.arange(1, 13)/12), 2))/12,
@@ -28,8 +25,9 @@ alpha_m12 = np.power(
 
 
 def mix(p, size=None):
-    """
-    Generate MIX(p) random processes [1].
+    """Generate MIX(p) random processes.
+
+    See [1].
 
     Parameters
     ----------

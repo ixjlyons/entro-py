@@ -22,6 +22,8 @@ setup(
 
     py_modules=['entropy'],
 
-    test_suite='nose.collector',
-    tests_require=['nose'],
+    install_requires=['numpy'],
+    extras_require={
+        'examples': ['matplotlib'],
+    }
 )

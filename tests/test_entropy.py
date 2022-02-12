@@ -17,6 +17,15 @@ class TestEntropy(TestCase):
         e = entropy.sampen(self.data_1d, 2, 0.1)
         assert_almost_equal(e, 0.70589052)
 
+    def test_sampen_naive(self):
+        x = np.array([0, 0.1, 0.2, 0.3, 1])
+        truth = np.log(3/1)
+        en = entropy.sampen_naive(x, 2, 0.5)
+        assert_almost_equal(en, truth)
+
+        en = entropy.sampen(x, 2, 0.5, scale=False)
+        assert_almost_equal(en, truth)
+
     def test_fuzzyen_1d(self):
         e = entropy.fuzzyen(self.data_1d, 2, 0.1, 2)
         assert_almost_equal(e, 0.20953354)

@@ -1,39 +1,48 @@
 """
 =================================================
-FuzzyEn of Uniformly Distributed Random Sequences
+Entropy of Uniformly Distributed Random Sequences
 =================================================
 
-Computes FuzzyEn of uniformly distributed random number sequences for different
-values of fuzzy function width `r`. The result should look roughly linear.
+
 """
 print(__doc__)
 
+import sys
 import numpy as np
 import matplotlib.pyplot as plt
 
 try:
     import entropy
+    import sampen
 except:
-    sys.path.insert(0, '..')
+    sys.path.insert(0, '.')
     import entropy
+    import sampen
 
 
 def main():
-    N = 100
-    rs = np.logspace(-3, 0, 10)
+    N = 1000
+    rep = 10
+    rs = np.logspace(-2, 0, 20)
 
     fig, ax = plt.subplots()
+    x = np.random.uniform(0, 1, size=(rep, N))
 
     es = []
+    es_samp = []
     for r in rs:
         runs = []
-        for i in range(50):
-            x = np.random.uniform(0, 1, N)
-            runs.append(entropy.fuzzyen(x, 2, r, 2))
+        runs_samp = []
+        for i in range(rep):
+            runs.append(sampen.apen(x[i], 2, r))
+            runs_samp.append(sampen.sampen(x[i], 2, r))
         es.append(np.mean(runs))
+        es_samp.append(np.mean(runs_samp))
 
-    ax.semilogx(rs, es, 'o')
+    ax.semilogx(rs, es, 'o', label='ApEn')
+    ax.semilogx(rs, es_samp, 's', label='SampEn')
     ax.set_ylim(0, 6)
+    ax.legend()
 
     plt.show()
 

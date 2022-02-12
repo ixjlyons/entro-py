@@ -5,6 +5,20 @@ def sampen(x, dim, r, scale=True):
     return entropy(x, dim, r, scale=scale)
 
 
+def sampen_naive(x, m, r):
+    return np.log(count_matches(x, m, r)/count_matches(x, m+1, r))
+
+
+def count_matches(x, l, tol):
+    n = x.size
+    matches = 0
+    for i in range(0, n-l):
+        for j in range(i+1, n-l):
+            if np.max(np.abs(x[i:i+l] - x[j:j+l])) <= tol:
+                matches += 1
+    return matches
+
+
 def cross_sampen(x1, x2, dim, r, scale=True):
     return entropy([x1, x2], dim, r, scale)
 
@@ -67,11 +81,11 @@ def entropy(x, dim, r, n=1, scale=True, remove_baseline=False):
     r : float
         Tolerance (max absolute difference between segments) for SampEn or the
         width of the fuzzy exponential function for FuzzyEn. Larger `r` makes
-        the function wider. Typical range 0.2 -- 1.
+        the function wider. Typical range is [0.2, 1].
     n : float, optional
-        Step width of fuzzy exponential function for FuzzyEn. Larger `n` makes
-        the function more rectangular. Usually in the range 1 -- 5 or so.
-        Default is 1.
+        Step width of fuzzy exponential function for FuzzyEn (ignored
+        otherwise). Larger `n` makes the function more rectangular. Usually in
+        the range [1, 5] or so. Default is 1.
     scale : bool, optional
         If True, scale the data (zero mean, unit variance). Default is True.
     remove_baseline : bool, optional
@@ -84,8 +98,9 @@ def entropy(x, dim, r, n=1, scale=True, remove_baseline=False):
         The calculated entropy.
     """
     fuzzy = True if remove_baseline else False
-    cross = True if type(x) == list else False
+    cross = True if isinstance(x, list) else False
     N = len(x[0]) if cross else len(x)
+    npat = N - dim
 
     if scale:
         if cross:
@@ -96,9 +111,9 @@ def entropy(x, dim, r, n=1, scale=True, remove_baseline=False):
     phi = [0, 0]  # phi(m), phi(m+1)
     for j in [0, 1]:
         m = dim + j
-        npat = N-dim
         if cross:
-            patterns = [pattern_mat(x[0], m)[:, :npat], pattern_mat(x[1], m)[:, :npat]]
+            patterns = [pattern_mat(x[0], m)[:, :npat],
+                        pattern_mat(x[1], m)[:, :npat]]
         else:
             patterns = pattern_mat(x, m)[:, :npat]
 
@@ -131,7 +146,8 @@ def entropy(x, dim, r, n=1, scale=True, remove_baseline=False):
 
             count[i] = np.sum(sim) - 1
 
-        phi[j] = np.mean(count) / (N-dim-1)
+        #phi[j] = np.mean(count) / (N - dim - 1)
+        phi[j] = np.sum(count)
 
     return np.log(phi[0] / phi[1])
 
